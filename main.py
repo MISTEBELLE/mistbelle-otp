@@ -61,8 +61,7 @@ async def order_otp(service="TELEGRAM", country="Indonesia"):
     await asyncio.sleep(7)
     logging.info("⏳ Menunggu nomor...")
 
-# ================== TANGKAP PESAN BOT ==================
-@app.on_message(filters.chat(BOT_USERNAME) & \filters.me)
+# ================== TANGKAP PESAN BOT (VERSI AMAN) ==================
 async def handle_bot_reply(client, message: Message):
     text = message.text or message.caption or ""
     if not text:
@@ -84,6 +83,9 @@ async def handle_bot_reply(client, message: Message):
     if otp:
         logging.info(f"🔑 OTP: {otp.group(1)}")
         await send_notif(f"🔑 OTP BERHASIL:\n{otp.group(1)}")
+
+# Daftarkan handler secara manual (ini yang diubah)
+app.add_handler(Client.on_message(filters.chat(BOT_USERNAME) & \~filters.me)(handle_bot_reply))
 
 # ================== AUTO LOOP ==================
 async def auto_loop(interval_minutes=8):
