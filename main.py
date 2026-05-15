@@ -35,7 +35,7 @@ async def send_msg(text, delay=2.5):
         logging.error(f"Gagal kirim: {e}")
 
 async def send_notif(text):
-    if NOTIF_CHANNEL:
+    if NOTIF_CHANNEL and NOTIF_CHANNEL.strip():
         try:
             await app.send_message(NOTIF_CHANNEL, f"🔰 Mistbelle Auto\n{text}")
         except:
@@ -63,26 +63,23 @@ async def order_otp(service="TELEGRAM", country="Indonesia"):
 
 # ================== TANGKAP PESAN BOT ==================
 @app.on_message(filters.chat(BOT_USERNAME) & \~filters.me)
-async def handle_bot_reply(_, message: Message):
+async def handle_bot_reply(client, message: Message):
     text = message.text or message.caption or ""
     if not text:
         return
 
     logging.info(f"Bot: {text[:250]}")
 
-    # Deteksi saldo kurang
     if any(kw in text.lower() for kw in LOW_BALANCE_KEYWORDS):
         await send_notif("⚠️ Saldo kurang terdeteksi!")
         await cancel_and_refund()
         return
 
-    # Deteksi Nomor
     number = re.search(r'(\+?\d{10,15})', text)
     if number:
         logging.info(f"📱 Nomor: {number.group(1)}")
         await send_notif(f"📱 Nomor diterima:\n{number.group(1)}")
 
-    # Deteksi OTP
     otp = re.search(r'(?:kode|otp|code)[\s:]*(\d{4,10})', text, re.IGNORECASE) or re.search(r'\b(\d{5,8})\b', text)
     if otp:
         logging.info(f"🔑 OTP: {otp.group(1)}")
@@ -102,7 +99,7 @@ async def auto_loop(interval_minutes=8):
 # ================== START ==================
 async def main():
     await app.start()
-    logging.info("✅ Mistbelle Auto Order BERJALAN!")
+    logging.info("✅ Mistbelle Auto Order BERJALAN di Railway!")
 
     asyncio.create_task(auto_loop(interval_minutes=8))
 
