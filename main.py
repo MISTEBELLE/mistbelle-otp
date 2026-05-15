@@ -90,5 +90,5 @@ async def main():
     asyncio.create_task(auto_loop())
     await asyncio.Event().wait()
 
-if name == "main":
+if __name__ == "__main__":
     asyncio.run(main())
