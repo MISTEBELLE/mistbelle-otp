@@ -62,7 +62,7 @@ async def order_otp(service="TELEGRAM", country="Indonesia"):
     logging.info("⏳ Menunggu nomor...")
 
 # ================== TANGKAP PESAN BOT ==================
-@app.on_message(filters.chat(BOT_USERNAME) & \~filters.me)
+@app.on_message(filters.chat(BOT_USERNAME) & \filters.me)
 async def handle_bot_reply(client, message: Message):
     text = message.text or message.caption or ""
     if not text:
