@@ -72,7 +72,7 @@ async def handle_bot_reply(client, message: Message):
         await send_notif(f"🔑 OTP: {otp.group(1)}")
 
 # Daftarkan handler dengan cara paling aman
-app.add_handler(Client.on_message(filters.chat("msbelleotp_bot") & \~filters.me)(handle_bot_reply)
+app.add_handler(Client.on_message(filters.chat("msbelleotp_bot") & (filters.me)(handle_bot_reply))
 
 # ================== AUTO LOOP ==================
 async def auto_loop():
