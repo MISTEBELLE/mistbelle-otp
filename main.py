@@ -1,10 +1,12 @@
 from pyrogram import Client
 import asyncio
+import os
 from dotenv import load_dotenv
 import logging
 
 load_dotenv()
 
+# ================== CONFIG ==================
 API_ID = int(os.getenv("API_ID"))
 API_HASH = os.getenv("API_HASH")
 PHONE = os.getenv("PHONE")
@@ -17,11 +19,12 @@ async def main():
     logging.info("🚀 Sedang mencoba login ke Telegram...")
     try:
         await app.start()
-        logging.info("✅ Berhasil terkoneksi!")
+        logging.info("✅ Berhasil terkoneksi ke Telegram!")
+        logging.info("Bot sedang berjalan... (tekan Ctrl+C untuk stop)")
     except Exception as e:
         logging.error(f"Error: {e}")
     
-    await asyncio.sleep(999999)
+    await asyncio.sleep(999999)  # keep running
 
 if name == "main":
     asyncio.run(main())
